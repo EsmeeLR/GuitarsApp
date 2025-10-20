@@ -31,54 +31,52 @@ const createCart = (carrito) => {
     p.className = 'text-center'
     p.innerText = 'EL carrito está vacío'
     const div = document.createElement('div')
-    const html = `<table class="w-100 table">
-                                    <thead>
-                                        <tr>
-                                            <th>Imagen</th>
-                                            <th>Nombre</th>
-                                            <th>Precio</th>
-                                            <th>Cantidad</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <img class="img-fluid" src="./img/guitarra_02.jpg" alt="imagen guitarra">
-                                            </td>
-                                            <td>SRV</td>
-                                            <td class="fw-bold">
-                                                    $299
-                                            </td>
-                                            <td class="flex align-items-start gap-4">
-                                                <button
-                                                    type="button"
-                                                    class="btn btn-dark"
-                                                >
-                                                    -
-                                                </button>
-                                                    1
-                                                <button
-                                                    type="button"
-                                                    class="btn btn-dark"
-                                                >
-                                                    +
-                                                </button>
-                                            </td>
-                                            <td>
-                                                <button
-                                                    class="btn btn-danger"
-                                                    type="button"
-                                                >
-                                                    X
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+    let total = 0
+    let html = `<table class="w-100 table">
+                        <thead>
+                            <tr>
+                                <th>Imagen</th>
+                                <th>Nombre</th>
+                                <th>Precio</th>
+                                <th>Cantidad</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>`
+    carrito.forEach (g => {
+        total += g.precio * g.cantidad
+        html += `<tr>
+                                <td>
+                                    <img class="img-fluid" src="./img/${g.imagen}.jpg" alt="imagen guitarra">
+                                </td>
+                                <td>${g.nombre}</td>
+                                <td class="fw-bold">
+                                        $${g.precio}
+                                </td>
+                                <td class="flex align-items-start gap-4">
+                                    <button
+                                        type="button"
+                                        class="btn btn-dark"
+                                    >-</button>
+                                        ${g.cantidad}
+                                    <button
+                                        type="button"
+                                        class="btn btn-dark"
+                                    >+</button>
+                                </td>
+                                <td>
+                                    <button
+                                        class="btn btn-danger"
+                                        type="button"
+                                    >X</button>
+                                </td>
+                            </tr>`
+    })                        
+    html += `</tbody>
+                    </table>
 
-                                <p class="text-end">Total pagar: <span class="fw-bold">$899</span></p>
-                                <button class="btn btn-dark w-100 mt-3 p-2">Vaciar Carrito</button>`
+                    <p class="text-end">Total pagar: <span class="fw-bold">$${total}</span></p>
+                    <button class="btn btn-dark w-100 mt-3 p-2">Vaciar Carrito</button>`
     div.innerHTML = html
     if(carrito.length === 0){
         carritoContainer.innerHTML = ''
@@ -88,6 +86,7 @@ const createCart = (carrito) => {
         carritoContainer.appendChild(div)
     }
 }
+
 const buttonClicked = (e) => {
     if(e.target.classList.contains('btn')){
         const dataId = e.target.getAttribute('data-id')
@@ -106,6 +105,13 @@ const buttonClicked = (e) => {
         createCart(carrito)
     }
 }
+
+const carritoClicked = (e) => {
+    if(e.target.classList.contains('btn')){
+        const btn = e.target.innerText
+        console.log(btn)
+    }
+}
 db.forEach((guitar) => {
     console.log(guitar.nombre)
     divContainer.appendChild(createCard(guitar))
@@ -113,3 +119,4 @@ db.forEach((guitar) => {
 createCart(carrito)
 
 divContainer.addEventListener('click', buttonClicked)
+carritoContainer.addEventListener('click', carritoClicked)
