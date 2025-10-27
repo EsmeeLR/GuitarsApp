@@ -150,7 +150,7 @@ const carritoCliked = (e) => {
         }else if(btn === 'Vaciar Carrito',toUpperCase()){
             carrito = []
         }
-         
+        setLocalStorage()
         createCart(carrito)
     }
 }
