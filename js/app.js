@@ -1,6 +1,6 @@
 import { db } from "./guitarras.js"
 
-const carrito = []
+let  carrito = []
 
 const divContainer = document.querySelector('main div')
 const carritoContainer = document.querySelector('#carrito')
@@ -44,8 +44,8 @@ const createCart = (carrito) => {
                         </thead>
                         <tbody>`
     carrito.forEach (g => {
-        total += g.precio * g.cantidad
-        html += `<tr>
+        total += total += g.precio * g.cantidad
+        html += `<tr data-id="${g.id}">
                                 <td>
                                     <img class="img-fluid" src="./img/${g.imagen}.jpg" alt="imagen guitarra">
                                 </td>
@@ -57,7 +57,8 @@ const createCart = (carrito) => {
                                     <button
                                         type="button"
                                         class="btn btn-dark"
-                                    >-</button>
+                                    >
+-</button>
                                         ${g.cantidad}
                                     <button
                                         type="button"
@@ -86,7 +87,6 @@ const createCart = (carrito) => {
         carritoContainer.appendChild(div)
     }
 }
-
 const buttonClicked = (e) => {
     if(e.target.classList.contains('btn')){
         const dataId = e.target.getAttribute('data-id')
@@ -105,18 +105,41 @@ const buttonClicked = (e) => {
         createCart(carrito)
     }
 }
-
-const carritoClicked = (e) => {
-    if(e.target.classList.contains('btn')){
-        const btn = e.target.innerText
-        console.log(btn)
-    }
-}
 db.forEach((guitar) => {
     console.log(guitar.nombre)
     divContainer.appendChild(createCard(guitar))
 })
 createCart(carrito)
 
+const carritoCliked = (e) => {
+    if(e.target.classList.contains('btn')){
+        const btn = e.target.innerText
+        
+        const idCarrito = e.target
+        .parentElement
+        .parentElement.getAttribute('data-id')
+        const idxCarrito = carrito
+                            .findIndex(g => g.id === Number(idCarrito))
+        if(btn === '-'){
+            if(carrito[idxCarrito].cantidad >1){
+                carrito[idxCarrito].cantidad--
+            }
+            
+        } else if (btn === '+'){
+            if (carrito[idxCarrito].cantidad <10){
+            carrito[idxCarrito].cantidad++  
+            }
+       
+        
+        } else if (btn === 'X'){
+            carrito = carrito.filter(g => g.id !== Number(idCarrito))
+        }else if(btn === 'Vaciar Carrito',toUpperCase()){
+            carrito = []
+        }
+         
+        createCart(carrito)
+    }
+}
+
 divContainer.addEventListener('click', buttonClicked)
-carritoContainer.addEventListener('click', carritoClicked)
+carritoContainer.addEventListener('click', carritoCliked)
